@@ -1,27 +1,60 @@
 import React, {SyntheticEvent, useState} from 'react';
-import * as domainName from "../config.json"
+import { Navigate } from 'react-router-dom';
+
+import config from "../config.json"
+import { error } from 'console';
 
 const Register = () => {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [redirect, setRedirect] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const submitFunc = async (e: SyntheticEvent) => {
         e.preventDefault();
-        // console.log({email, username, password});
-
-        const resp = await fetch("http://localhost:8000" + "/users/signup", {
+        console.log("body: ");
+        console.log(JSON.stringify({
+            username,
+            email,
+            password,
+        }));
+        
+        const endpoint = config.domainName + "/users/signup";
+        console.log("endpoint: %s", endpoint);
+        const resp = await fetch(endpoint, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 username,
                 email,
-                password
-            })
+                password,
+            }),
         });
+        try {
+            const content = await resp.json();
+            console.log("content: ", content);
 
-        const content = await resp.json();
-        console.log(content);
+            if (resp.ok) {
+                console.log("yeahhhh");
+                setErrorMessage("");
+                setRedirect(true);
+            } else {
+                setErrorMessage(content['error']);
+            }
+            
+            
+        } catch (error) {
+            console.log("error: ", error);
+            if (error instanceof Error) {
+                setErrorMessage(error.toString());
+            }
+        }
+        
+    };
+
+    if (redirect) {
+        return <Navigate to="/login"/>;
     }
 
     return (
@@ -49,6 +82,11 @@ const Register = () => {
                 </div>
                 <button className="w-100 btn btn-lg btn-primary" type="submit">Register</button>
             </form>
+            <div>
+                <p style={{color: 'red'}}>
+                    {errorMessage}
+                </p>
+            </div>
         </div>
     );
 };
