@@ -2,8 +2,9 @@ import React, {SyntheticEvent, useState} from 'react';
 import { Navigate } from 'react-router-dom';
 
 import config from "../config.json"
+import UserData from '../types/userdata';
 
-const Login = (props: {setName: (name: string) => void}) => {
+const Login = (props: {setUserData: (content: UserData) => void}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [redirect, setRedirect] = useState(false);
@@ -30,7 +31,7 @@ const Login = (props: {setName: (name: string) => void}) => {
         }
 
         const content = await resp.json();
-        props.setName(content['username']);        
+        props.setUserData(content as UserData);        
     }
 
     if (redirect) {

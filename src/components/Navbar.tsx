@@ -1,10 +1,16 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
 
-import config from "../config.json"
+import UserData, { defaultUserData } from '../types/userdata';
+import config from "../config.json";
+
+type Props = {
+    userData: UserData,
+    setUserData: (content: UserData) => void,
+};
 
 
-const Navbar = (props: {name: string, setName: (name: string) => void}) => {
+const Navbar = (props: Props) => {
     const logoutFunc = async () => {
         const endpoint = config.domainName + "/users/logout";
         await fetch(endpoint, {
@@ -12,11 +18,11 @@ const Navbar = (props: {name: string, setName: (name: string) => void}) => {
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
         });
-        props.setName("");
+        props.setUserData(defaultUserData);
     }
 
     let menu;
-    if (props.name == null || props.name === "") {
+    if (props.userData.username == null || props.userData.username === "") {
         menu = (
             <ul className="navbar-nav ms-auto mb-2 mb-md-0">
                 <li className="nav-item">

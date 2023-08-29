@@ -1,10 +1,11 @@
 import React from 'react';
+import UserData from '../types/userdata';
 
-const Home = (props: {name: string}) => {
+const Home = (props: {userData: UserData}) => {
 
     return (
         <div>
-            {props.name ? "Welcome, " + props.name + "!" : "Not logged in"}
+            {props.userData.username ? "Welcome, " + props.userData.username + "!" : "Not logged in"}
         </div>
     );
 };

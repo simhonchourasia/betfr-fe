@@ -2,7 +2,6 @@ import React, {SyntheticEvent, useState} from 'react';
 import { Navigate } from 'react-router-dom';
 
 import config from "../config.json"
-import { error } from 'console';
 
 const Register = () => {
     const [email, setEmail] = useState("");

@@ -12,14 +12,17 @@ import Bets from './components/Bets';
 
 import './App.css';
 import config from "./config.json"
+import UserData, { defaultUserData } from './types/userdata';
 
 // Using tutorial: 
 // https://www.youtube.com/watch?v=d4Y2DkKbxM0
 
 function App() {
 
-  const [name, setName] = useState('');
+  const [userData, setUserData] = useState(defaultUserData);
+  const [updateRequested, setUpdateRequested] = useState(false);
 
+    // note that this will run twice when mounting due to strict mode in tsconfig.json
     useEffect(() => {
         (
             async () => {
@@ -29,24 +32,27 @@ function App() {
                     credentials: 'include',
                 });
                     
-                const content= await resp.json();
+                const content = await resp.json();
                 console.log("set username to ", content.username);
-                setName(content.username);
+                setUserData(content as UserData);
+                if (updateRequested) {
+                    setUpdateRequested(false);
+                }
             }
         )()
-    });
+    }, [updateRequested]);
 
   return (
     <div className="App">
       <BrowserRouter>
-      <Navbar name={name} setName={setName}/>
+      <Navbar userData={userData} setUserData={setUserData}/>
         <main className="form-signin w-100 m-auto">
           <Routes>
-            <Route path="/" Component={() => <Home name={name}/>} />
-            <Route path="/login" Component={() => <Login setName={setName} />} />
+            <Route path="/" Component={() => <Home userData={userData}/>} />
+            <Route path="/login" Component={() => <Login setUserData={setUserData} />} />
             <Route path="/register" Component={Register} />
-            <Route path="/friends" Component={Friends} />
-            <Route path="/bets" Component={Bets} />
+            <Route path="/friends" Component={() => <Friends userData={userData} />} />
+            <Route path="/bets" Component={() => <Bets userData={userData} />} />
           </Routes>
         </main>
       </BrowserRouter>
