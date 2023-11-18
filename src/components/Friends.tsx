@@ -14,7 +14,7 @@ const Friends = (props: {userData: UserData}) => {
     });
 
     return (
-        <div>
+        <div style={{width: "100%"}}>
             <ThemeProvider theme={createTheme()}>
                 <MUIDataTable
                     title={"My Friends"}
@@ -27,6 +27,7 @@ const Friends = (props: {userData: UserData}) => {
                         selectableRowsHeader: false,
                         viewColumns: false,
                         responsive: 'simple',
+                        textLabels: {body: {noMatch: 'No friends found...'}}
                     }}
                 />
             </ThemeProvider>

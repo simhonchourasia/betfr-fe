@@ -22,6 +22,7 @@ const Bets = (props: {userData: UserData}) => {
                     selectableRowsHeader: false,
                     viewColumns: false,
                     responsive: 'simple',
+                    textLabels: {body: {noMatch: 'No bets found...'}}
                 }}
             />
         </div>
